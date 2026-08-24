@@ -1,0 +1,76 @@
+---
+import { Menu, X } from '@lucide/astro';
+import LanguageToggle from './LanguageToggle.astro';
+import ThemeToggle from './ThemeToggle.astro';
+---
+
+<header
+  id="site-header"
+  data-aos="fade-up"
+  data-aos-duration="400"
+  class="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-bg-light/70 dark:bg-bg-dark/70 border-b border-black/5 dark:border-white/10 transition-colors duration-300"
+  
+>
+  <div class="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-10 lg:px-16 py-5">
+    <a href="#home" class="font-display text-2xl font-bold tracking-tight">
+      Christian<span class="text-brand-500">.</span>
+    </a>
+
+    <nav id="navbar" class="hidden lg:flex items-center gap-10 font-medium text-sm">
+      <a href="#home" data-i18n="home" class="hover:text-brand-500 transition-colors border-b-2 border-transparent hover:border-brand-500 pb-1">Home</a>
+      <a href="#services" data-i18n="services" class="hover:text-brand-500 transition-colors border-b-2 border-transparent hover:border-brand-500 pb-1">Servicios</a>
+      <a href="#skills" data-i18n="skills" class="hover:text-brand-500 transition-colors border-b-2 border-transparent hover:border-brand-500 pb-1">Habilidades</a>
+      <a href="#projects" data-i18n="projects" class="hover:text-brand-500 transition-colors border-b-2 border-transparent hover:border-brand-500 pb-1">Proyectos</a>
+      <a href="#contact" data-i18n="contact" class="hover:text-brand-500 transition-colors border-b-2 border-transparent hover:border-brand-500 pb-1">Contacto</a>
+    </nav>
+
+    <div class="flex items-center gap-5">
+      <LanguageToggle />
+      <ThemeToggle />
+
+      <a 
+        href="#contact"
+        data-i18n="btncontact"
+        class="hidden lg:inline-block bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold px-6 py-2.5 rounded-full transition-colors"
+      >
+        Contacto
+      </a>
+
+      <button id="menu-toggle" aria-label="Abrir menú" class="lg:hidden p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+        <Menu id="icon-menu" class="w-6 h-6" />
+        <X id="icon-close" class="w-6 h-6 hidden" />
+      </button>
+    </div>
+  </div>
+
+  <nav id="navbar-mobile" class="hidden lg:hidden flex-col gap-1 px-6 pb-4 font-medium text-sm">
+    <a href="#home" data-i18n="home" class="py-2">Home</a>
+    <a href="#services" data-i18n="services" class="py-2">Servicios</a>
+    <a href="#skills" data-i18n="skills" class="py-2">Habilidades</a>
+    <a href="#projects" data-i18n="projects" class="py-2">Proyectos</a>
+    <a href="#contact" data-i18n="contact" class="py-2">Contacto</a>
+  </nav>
+</header>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const navbarMobile = document.getElementById('navbar-mobile');
+  const iconMenu = document.getElementById('icon-menu');
+  const iconClose = document.getElementById('icon-close');
+
+  menuToggle?.addEventListener('click', () => {
+    navbarMobile?.classList.toggle('hidden');
+    navbarMobile?.classList.toggle('flex');
+    iconMenu?.classList.toggle('hidden');
+    iconClose?.classList.toggle('hidden');
+  });
+
+  navbarMobile?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      navbarMobile.classList.add('hidden');
+      navbarMobile.classList.remove('flex');
+      iconMenu?.classList.remove('hidden');
+      iconClose?.classList.add('hidden');
+    });
+  });
+</script>

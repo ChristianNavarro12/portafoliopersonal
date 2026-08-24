@@ -1,0 +1,39 @@
+---
+import { ExternalLink } from '@lucide/astro';
+
+interface Props {
+  image: string;
+  titleKey: string;
+  title: string;
+  descKey: string;
+  desc: string;
+  href: string;
+}
+const { image, titleKey, title, descKey, desc, href } = Astro.props;
+---
+
+<article class="group h-full bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-3xl shadow-sm overflow-hidden hover:-translate-y-2 hover:shadow-xl hover:shadow-brand-500/10 transition-all duration-300 flex flex-col">
+  <div class="aspect-video overflow-hidden bg-black/5 dark:bg-white/5">
+    <img
+      src={image}
+      alt={title}
+      loading="lazy"
+      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+    />
+  </div>
+
+  <div class="p-8 flex flex-col flex-1">
+    <h3 data-i18n={titleKey} class="font-display text-xl font-bold mb-3">{title}</h3>
+    <p data-i18n={descKey} class="opacity-70 text-sm leading-relaxed mb-6 flex-1">{desc}</p>
+
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-2 self-start text-brand-500 font-semibold text-sm hover:gap-3 transition-all"
+    >
+      <span data-i18n="p_b">Ver proyecto</span>
+      <ExternalLink class="w-4 h-4" />
+    </a>
+  </div>
+</article>

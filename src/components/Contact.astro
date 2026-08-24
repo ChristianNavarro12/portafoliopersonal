@@ -1,0 +1,144 @@
+---
+import { Send } from '@lucide/astro';
+import SectionHeading from './SectionHeading.astro';
+---
+
+<section id="contact" class="pt-6 md:pt-10 pb-24 md:pb-32 px-6 md:px-10 lg:px-16">
+  <div class="max-w-3xl mx-auto">
+    <SectionHeading eyebrowKey="contact_eyebrow" eyebrow="Hablemos" titleKey="contact2" title="Contáctame" />
+
+    <form
+      id="contact-form"
+      data-aos="fade-up"
+      class="bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 shadow-sm rounded-3xl p-8 md:p-10 flex flex-col gap-5"
+    >
+      <div class="grid sm:grid-cols-2 gap-5">
+        <input
+          type="text"
+          id="name"
+          name="name"
+          data-i18n="[placeholder]f_name"
+          placeholder="Nombre"
+          required
+          class="w-full bg-transparent border border-black/10 dark:border-white/15 rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-shadow"
+        />
+        <input
+          type="email"
+          id="email"
+          name="email"
+          data-i18n="[placeholder]f_email"
+          placeholder="Correo electrónico"
+          required
+          class="w-full bg-transparent border border-black/10 dark:border-white/15 rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-shadow"
+        />
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-5">
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          data-i18n="[placeholder]f_phone"
+          placeholder="Teléfono"
+          required
+          class="w-full bg-transparent border border-black/10 dark:border-white/15 rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-shadow"
+        />
+        <input
+          type="text"
+          id="subject"
+          name="subject"
+          data-i18n="[placeholder]f_subject"
+          placeholder="Asunto"
+          required
+          class="w-full bg-transparent border border-black/10 dark:border-white/15 rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-shadow"
+        />
+      </div>
+
+      <textarea
+        id="description"
+        name="description"
+        data-i18n="[placeholder]f_message"
+        placeholder="Mensaje"
+        rows="6"
+        required
+        class="w-full bg-transparent border border-black/10 dark:border-white/15 rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-shadow resize-none"
+      ></textarea>
+
+      <button
+        type="submit"
+        id="submit-btn"
+        class="inline-flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-600 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold px-8 py-3.5 rounded-full transition-colors self-start"
+      >
+        <Send class="w-4 h-4" />
+        <span data-i18n="send">Enviar mensaje</span>
+      </button>
+
+      <p
+        id="form-status"
+        class="text-sm hidden"
+        role="status"
+      ></p>
+    </form>
+  </div>
+</section>
+
+<script>
+  import emailjs from '@emailjs/browser';
+  import i18next from 'i18next';
+
+  emailjs.init({
+    publicKey: '1R4r0LZnzDIXb2EeK', // reemplaza con tu Public Key real (Account > API Keys en el dashboard de EmailJS)
+  });
+
+  const SERVICE_ID = 'default_service';   // reemplaza con tu Service ID
+  const TEMPLATE_ID = 'template_zrh6oi4'; // reemplaza con tu Template ID
+
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+  const status = document.getElementById('form-status') as HTMLParagraphElement | null;
+  const btnLabel = submitBtn?.querySelector('span');
+
+  let statusTimeout: ReturnType<typeof setTimeout> | undefined;
+
+  function showStatus(key: 'success_msg' | 'error_msg') {
+    if (!status) return;
+
+    clearTimeout(statusTimeout);
+
+    status.textContent = i18next.t(key);
+    status.className = `text-sm ${key === 'success_msg' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`;
+
+    statusTimeout = setTimeout(() => {
+      status.textContent = '';
+      status.className = 'text-sm hidden';
+    }, 3000);
+  }
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!submitBtn || !btnLabel) return;
+
+    submitBtn.disabled = true;
+    btnLabel.textContent = i18next.t('sending');
+
+    try {
+      await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form);
+      showStatus('success_msg');
+      form.reset();
+    } catch (error) {
+      showStatus('error_msg');
+    } finally {
+      submitBtn.disabled = false;
+      btnLabel.textContent = i18next.t('send');
+    }
+  });
+
+  // Si cambian de idioma justo después de enviar, el texto del botón/status se
+  // mantiene traducido correctamente (excepto el status, que ya se queda oculto
+  // hasta el próximo envío, así que no hace falta re-traducirlo).
+  document.addEventListener('langchange', () => {
+    if (btnLabel && submitBtn && !submitBtn.disabled) {
+      btnLabel.textContent = i18next.t('send');
+    }
+  });
+</script>

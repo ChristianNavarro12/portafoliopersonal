@@ -1,0 +1,86 @@
+---
+import { Mail, Download } from '@lucide/astro';
+import GithubIcon from './icons/GithubIcon.astro';
+import LinkedinIcon from './icons/LinkedinIcon.astro';
+---
+
+<section id="home" class="min-h-screen flex items-center pt-28 lg:pt-0">
+  <div class="max-w-7xl mx-auto w-full px-6 md:px-10 lg:px-16 flex flex-col-reverse lg:flex-row items-center justify-between gap-16">
+
+    <div
+      data-aos="fade-right"
+      data-aos-duration="400"
+      class="flex flex-col items-center text-center lg:items-start lg:text-left max-w-xl"
+    >
+      <p data-i18n="greeting" class="text-brand-500 font-semibold tracking-wide text-md uppercase mb-3">
+        Hola 👋
+      </p>
+      <h1 data-i18n="titleone" class="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4">
+        Hola, soy Christian
+      </h1>
+      <h3 data-i18n="titlethree" class="text-xl md:text-2xl text-brand-500 font-semibold mb-6">
+        Desarrollador Fullstack
+      </h3>
+      <p data-i18n="p_home" class="text-base md:text-lg opacity-80 leading-relaxed mb-8">
+        Egresado de Ingeniería en Desarrollo y Gestión de Software...
+      </p>
+
+      <div class="flex gap-4 mb-8">
+        <a href="https://github.com/ChristianNavarro12" target="_blank" rel="noopener noreferrer" aria-label="GitHub"
+          class="w-11 h-11 flex items-center justify-center rounded-full border-2 border-brand-500 hover:bg-brand-500 hover:text-white transition-all hover:-translate-y-1">
+          <GithubIcon class="w-5 h-5" />
+        </a>
+        <a href="https://www.linkedin.com/in/christian-yahir-navarro-chan-055476262/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+          class="w-11 h-11 flex items-center justify-center rounded-full border-2 border-brand-500 hover:bg-brand-500 hover:text-white transition-all hover:-translate-y-1">
+          <LinkedinIcon class="w-5 h-5" />
+        </a>
+        <a href="mailto:ejemplo@gmail.com" aria-label="Email"
+          class="w-11 h-11 flex items-center justify-center rounded-full border-2 border-brand-500 hover:bg-brand-500 hover:text-white transition-all hover:-translate-y-1">
+          <Mail class="w-5 h-5" />
+        </a>
+      </div>
+
+      <div class="flex flex-wrap gap-4">
+        <a href="#contact" data-i18n="a_con"
+          class="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-7 py-3 rounded-full transition-colors">
+          Contáctame
+        </a>
+        <a id="cv-link" href="/cv/cv_es.pdf" download="CV_Christian_Es" data-i18n="a_doc"
+          class="inline-flex items-center gap-2 border-2 border-brand-500 text-brand-500 hover:bg-brand-500 hover:text-white font-semibold px-7 py-3 rounded-full transition-colors">
+          <Download class="w-4 h-4" />
+          Descargar CV
+        </a>
+      </div>
+    </div>
+
+    <div
+      data-aos="fade-left"
+      data-aos-duration="400"
+      class="relative shrink-0"
+    >
+      <div class="absolute inset-0 bg-brand-500/20 rounded-full blur-3xl scale-90"></div>
+      <img src="/images/hero.svg" alt="Ilustración de Christian" class="relative w-64 md:w-80 lg:w-96" />
+    </div>
+  </div>
+</section>
+
+<script>
+  const cvLink = document.getElementById('cv-link') as HTMLAnchorElement | null;
+
+  function setCvByLang(lang: string) {
+    if (!cvLink) return;
+    if (lang === 'en') {
+      cvLink.href = '/cv/cv_en.pdf';
+      cvLink.setAttribute('download', 'CV_Christian_En');
+    } else {
+      cvLink.href = '/cv/cv_es.pdf';
+      cvLink.setAttribute('download', 'CV_Christian_Es');
+    }
+  }
+
+  setCvByLang(localStorage.getItem('lang') || 'es');
+
+  document.addEventListener('langchange', ((e: CustomEvent) => {
+    setCvByLang(e.detail.lang);
+  }) as EventListener);
+</script>

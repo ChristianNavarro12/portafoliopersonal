@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+/* Habilita el dark mode controlado por clase (para tu botón toggle) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Tipografías */
+  --font-sans: "Inter", sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+
+  /* Color de acento — ajústalo a tu gusto */
+  --color-brand-500: oklch(0.65 0.18 250);
+  --color-brand-600: oklch(0.55 0.18 250);
+
+  /* Fondos y textos para ambos modos */
+  --color-bg-light: oklch(0.96 0.004 250);
+  --color-bg-dark: oklch(0.18 0.01 250);
+  --color-text-light: oklch(0.2 0 0);
+  --color-text-dark: oklch(0.95 0 0);
+  
+}
+
+/* src/styles/global.css - al final, después de @theme */
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}

@@ -12,6 +12,15 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.2.4"
+    "@emailjs/browser": "^4.4.1",
+    "@lucide/astro": "^1.33.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "aos": "^2.3.4",
+    "astro": "^7.2.4",
+    "i18next": "^26.4.0",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@types/aos": "^3.0.8"
   }
 }

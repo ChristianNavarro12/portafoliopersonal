@@ -1,0 +1,52 @@
+---
+// src/layouts/MainLayout.astro
+import '../styles/global.css';
+import 'aos/dist/aos.css';
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Christian | Desarrollador Fullstack',
+  description = 'Portafolio de Christian, desarrollador fullstack especializado en Node.js, React y Astro.',
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Anti-flash: aplica el tema guardado ANTES de pintar la página -->
+    <script is:inline>
+      const theme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (theme === 'dark' || (!theme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
+  </head>
+  <body class="bg-bg-light text-text-light dark:bg-bg-dark dark:text-text-dark font-sans transition-colors duration-300">
+    <slot />
+    <script>
+      import AOS from 'aos';
+      AOS.init({
+        duration: 400, // Duración de la animación en milisegundos
+        once: true,    // Si la animación debe ocurrir solo una vez
+      });
+    </script>
+  </body>
+</html>
