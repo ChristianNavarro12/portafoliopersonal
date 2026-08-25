@@ -67,20 +67,47 @@ import LinkedinIcon from './icons/LinkedinIcon.astro';
 <script>
   const cvLink = document.getElementById('cv-link') as HTMLAnchorElement | null;
 
+  const CV_FILES: Record<string, { path: string; filename: string }> = {
+    es: { path: '/cv/cv_es.pdf', filename: 'CV_Christian_Es.pdf' },
+    en: { path: '/cv/cv_en.pdf', filename: 'CV_Christian_En.pdf' },
+  };
+
+  let currentLang = localStorage.getItem('lang') || 'es';
+
   function setCvByLang(lang: string) {
+    currentLang = CV_FILES[lang] ? lang : 'es';
     if (!cvLink) return;
-    if (lang === 'en') {
-      cvLink.href = '/cv/cv_en.pdf';
-      cvLink.setAttribute('download', 'CV_Christian_En');
-    } else {
-      cvLink.href = '/cv/cv_es.pdf';
-      cvLink.setAttribute('download', 'CV_Christian_Es');
-    }
+    const file = CV_FILES[currentLang];
+    cvLink.href = file.path; // fallback por si el fetch de abajo falla
+    cvLink.setAttribute('download', file.filename);
   }
 
-  setCvByLang(localStorage.getItem('lang') || 'es');
+  setCvByLang(currentLang);
 
   document.addEventListener('langchange', ((e: CustomEvent) => {
     setCvByLang(e.detail.lang);
   }) as EventListener);
+
+  cvLink?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const file = CV_FILES[currentLang];
+
+    try {
+      const response = await fetch(file.path);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+
+      const tempLink = document.createElement('a');
+      tempLink.href = blobUrl;
+      tempLink.download = file.filename;
+      document.body.appendChild(tempLink);
+      tempLink.click();
+      document.body.removeChild(tempLink);
+
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      // Si falla el fetch (sin conexión, etc.), cae de vuelta al comportamiento normal
+      window.open(file.path, '_blank');
+    }
+  });
 </script>
